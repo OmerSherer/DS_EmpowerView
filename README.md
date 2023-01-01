@@ -6,4 +6,8 @@ Mentor:
 Shay Horovitz
 
 Group members:
-
+Omer Sherer
+Oz Lovton
+Omer Slik
+Ofir Mozafi
+Hila Perez
