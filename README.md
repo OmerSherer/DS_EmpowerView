@@ -1,4 +1,4 @@
-# DS_ImpowerView
+# DS_EmpowerView
 Colman 2023
 This is our project in Data Science specialization.
 
