@@ -10,5 +10,5 @@ Omer Sherer,
 Oz Lovton,
 Omer Slik,
 Ofir Mozafi,
-Hila Perez
+Hila Perez,
 Yaniv Aga
