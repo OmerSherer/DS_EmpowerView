@@ -1,5 +1,6 @@
 import mediapipe as mp # Import mediapipe
 import cv2 # Import opencv
+import os
 
 import csv
 import numpy as np
