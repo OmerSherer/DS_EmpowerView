@@ -34,10 +34,10 @@ def process_camera(holistic, output_file=0, class_name=None, input_file=0):
             try:
                 # Extract Pose landmarks
                 pose = results.pose_landmarks.landmark
-                pose_row = list(np.array([[landmark.x, landmark.y, landmark.z, landmark.visibility] for landmark in pose]).flatten())
+                pose_row = list(np.array([[round(landmark.x, 8), round(landmark.y, 8), round(landmark.z, 8), round(landmark.visibility, 8)] for landmark in pose]).flatten())
                 # Extract Face landmarks
                 face = results.face_landmarks.landmark
-                face_row = list(np.array([[landmark.x, landmark.y, landmark.z, landmark.visibility] for landmark in face]).flatten())
+                face_row = list(np.array([[round(landmark.x, 8), round(landmark.y, 8), round(landmark.z, 8), round(landmark.visibility, 8)] for landmark in face]).flatten())
                 # Concate rows
                 row = pose_row+face_row
                 # Append class name
