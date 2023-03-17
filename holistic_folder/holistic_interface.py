@@ -1,4 +1,5 @@
 from help_functions import *
+import time
 
 def create_train_set_csv(file_name,landmarks):
         with open(file_name, mode='w', newline='') as f:
@@ -44,6 +45,10 @@ def process_camera(holistic, output_file=0, class_name=None, input_file=0):
                 if class_name:
                      row.insert(0, class_name)
 
+                # Append timestamp
+                ts = time.time()
+                row.insert(0, ts)
+
                 # Export to CSV
                 current_dir = os.path.dirname(os.path.abspath(__file__))
                 output_dir = os.path.join(current_dir, 'output_csv_directory')
@@ -54,8 +59,10 @@ def process_camera(holistic, output_file=0, class_name=None, input_file=0):
                 if not os.path.exists(output_file_path): # if the file does not exist create it
                     num_coords = len(results.pose_landmarks.landmark)+len(results.face_landmarks.landmark)
                     landmarks = []
+                    landmarks += ['timestamp']
                     if class_name:
                          landmarks += ['class']
+
                     for val in range(1, num_coords+1):
                         landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val)]
                     create_train_set_csv(output_file_path,landmarks)
