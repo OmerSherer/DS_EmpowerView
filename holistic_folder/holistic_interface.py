@@ -137,6 +137,13 @@ def convert_mp4_to_images(video_name):
     video.release()
 
 
+# the main function to detect and show gestures in real time, outputing 2 files: coordinates & classify results
+def process_video_real_time_and_save_to_scv(coordinates_output_file=0, classify_output_file=0, input_file=0):
+
+    holistic = mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
+    
+
 '''
 
 #running the code:
