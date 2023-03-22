@@ -6,9 +6,9 @@ Mentor:
 Shay Horovitz
 
 Group members:
-Omer Sherer,
+Omer Sherer (325992857),
 Oz Lovton,
-Omer Slik,
-Ofir Mozafi,
-Hila Perez,
-Yaniv Aga
+Omer Slik (313347502),
+Ofir Mozafi (208298653),
+Hila Perez (313601395),
+Yaniv Aga (205927551)
