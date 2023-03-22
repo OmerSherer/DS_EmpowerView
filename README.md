@@ -9,6 +9,6 @@ Group members:
 Omer Sherer,
 Oz Lovton,
 Omer Slik,
-Ofir Mozafi,
+Ofir Mutzaffi,
 Hila Perez,
 Yaniv Aga
