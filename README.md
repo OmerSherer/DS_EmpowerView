@@ -7,7 +7,7 @@ Shay Horovitz
 
 Group members:
 Omer Sherer (325992857),
-Oz Lovton,
+Oz Lovton (326529781),
 Omer Slik (313347502),
 Ofir Mozafi (208298653),
 Hila Perez (313601395),
