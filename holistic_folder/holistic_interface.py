@@ -1,5 +1,15 @@
 from help_functions import *
+# from classy import cnn
 import time
+
+def load_classifyer():
+    # import os
+    # current_dir = os.path.dirname(os.path.abspath(''))
+    # path = current_dir+'\DS_EmpowerView\holistic_folder\saved_models\weights_model_1.hdf5'
+    # model = tf.keras.models.load_model('/saved_models/classy_model_1')
+    model = tf.keras.models.load_model('D:\Empower View\DS_EmpowerView\holistic_folder\saved_models\classy_model_1.h5')
+    # model.load_weights(path)
+    return model
 
 def create_train_set_csv(file_name,landmarks):
         with open(file_name, mode='w', newline='') as f:
@@ -138,11 +148,127 @@ def convert_mp4_to_images(video_name):
 
 
 # the main function to detect and show gestures in real time, outputing 2 files: coordinates & classify results
-def process_video_real_time_and_save_to_scv(coordinates_output_file=0, classify_output_file=0, input_file=0):
+def process_video_real_time_and_save_to_csv(coordinates_output_file=0, classify_output_file=0, input_file=0, sc=None):
+
+    if input_file:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        input_file = os.path.join(current_dir, 'videos/'+input_file)
+    cap = cv2.VideoCapture(input_file)
 
     holistic = mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+    classifyer = load_classifyer()
+    classes = ['happy','sad','insecure','closed','open','unknown']
+    columns_names = ['timestamp','class','happy','sad','insecure','closed','open']
+    to_save = pd.DataFrame(columns=columns_names)
 
-    
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        image = recolor_image(frame) # Recolor Feed
+        results, face_landmarks, right_hand_landmarks, left_hand_landmarks, pose_landmarks = process_image(holistic, image) # Make Detections
+        image = recolor_image_back(image) # Recolor image back to BGR for rendering
+
+        draw_face_landmarks(image, face_landmarks) # 1. Draw face landmarks
+        draw_right_hand_landmarks(image, right_hand_landmarks) # 2. Right hand
+        draw_left_hand_landmarks(image, left_hand_landmarks) # 3. Left Hand
+        draw_pose_landmarks(image, pose_landmarks) # 4. Pose Detections
+
+
+
+        # Export coordinates
+        try:
+            # Extract Pose landmarks
+            pose = results.pose_landmarks.landmark
+            pose_row = list(np.array([[round(landmark.x, 8), round(landmark.y, 8), round(landmark.z, 8), round(landmark.visibility, 8)] for landmark in pose]).flatten())
+            # Extract Face landmarks
+            face = results.face_landmarks.landmark
+            face_row = list(np.array([[round(landmark.x, 8), round(landmark.y, 8), round(landmark.z, 8), round(landmark.visibility, 8)] for landmark in face]).flatten())
+            # Concate rows
+            row = pose_row+face_row
+
+            # single prediction
+            X = pd.DataFrame([row])
+            X = sc.transform(X)
+            single_row = np.array(row) 
+            single_row = single_row.reshape(1, -1)
+            single_row = sc.transform(single_row)
+            X = np.reshape(single_row,newshape=(1,167,4,3))
+            result = classifyer.predict(X)
+            result = np.append(result, 0.5)
+            max_index = np.argmax(result)
+            class_name = classes[max_index]
+            print(class_name, result)
+
+            row_classify = list(result)
+            # Append class nameq
+            row.insert(0, class_name)
+            row_classify.insert(0, class_name)
+            # Append timestamp
+            ts = time.time()
+            row.insert(0, ts)
+            row_classify.insert(0, ts)
+
+            # Export to CSV
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            output_dir = os.path.join(current_dir, 'output_csv_directory')
+            if not os.path.exists(output_dir): # if the folder does not exist create it
+                os.mkdir(output_dir)
+
+            output_file_path = output_dir + '/' + coordinates_output_file
+            if not os.path.exists(output_file_path): # if the file does not exist create it
+                num_coords = len(results.pose_landmarks.landmark)+len(results.face_landmarks.landmark)
+                landmarks = []
+                landmarks += ['timestamp']
+                landmarks += ['class']
+
+                for val in range(1, num_coords+1):
+                    landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val)]
+                create_train_set_csv(output_file_path,landmarks)
+                
+            with open(output_file_path, mode='a', newline='') as f: # append the coordinates to the csv
+                csv_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                csv_writer.writerow(row)
+
+
+            # export classify to csv
+            output_file_path_classify = output_dir + '/' + coordinates_output_file
+
+            print(to_save)
+            print(row_classify)
+            to_save.loc[len(to_save)] = row_classify
+            to_save.to_csv(path_or_buf=output_file_path_classify,)
+
+        except ValueError as e:
+            print("ValueError occurred: ", e)
+        except IndexError as e:
+            print("IndexError occurred: ", e)
+        except FileNotFoundError as e:
+            print("FileNotFoundError occurred: ", e)
+        except Exception as e:
+            print("An error occurred: ", e)
+
+        cv2.imshow('Raw Webcam Feed', image)
+
+        if cv2.waitKey(10) & 0xFF == ord('q'): # press 'q' to exist
+            break
+
+    # cap.release()
+    cv2.destroyAllWindows()
+    return results
+
+
+    # 1) input video into a frame
+    # 2) process the frame through the holistic
+    # 3) process the holistic coordinates throught the classifyer
+    # 4) add row of coordinates to one csv and add row of prediction to other csv
+
+
+# process_video_real_time_and_save_to_csv(coordinates_output_file='coords.csv', classify_output_file=0, input_file=0)
+# model = load_classifyer()
+# weights = model.get_weights()
+# print(weights[:1][0][0][0][0][0])
 
 '''
 
