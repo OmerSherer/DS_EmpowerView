@@ -12,4 +12,3 @@ Omer Slik,
 Ofir Mutzaffi,
 Hila Perez,
 Yaniv Aga
-44
