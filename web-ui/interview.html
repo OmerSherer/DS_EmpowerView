@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>welcome</title>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Job Interview Page</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -13,39 +14,50 @@
   
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/interview.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css'>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+
 </head>
 <body>
     <header>
         <nav id="nav">
             <div class="nav left">
               <span class="gradient skew">
-                <h1 class="logo un-skew"><a href="home.html">
+                <h1 class="logo un-skew"><a href="index.html">
                   <img src="images/logo3.png" alt="Logo" class="logo">
                   </a></h1>
               </span>
               <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
             </div>
             <div class="nav right">
-              <a href="home.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
+              <a href="index.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
               <a href="login.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Login</span></span></a>
               <a href="signup.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Sign-up</span></span></a>
-              <a href="interview.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Interview</span></span></a>
-              <a href="welcome.html" class="nav-link active"><span class="nav-link-span"><span class="u-nav">welcome</span></span></a>
+              <a href="interview.html" class="nav-link active"><span class="nav-link-span"><span class="u-nav">Interview</span></span></a>
+              <a href="welcome.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">welcome</span></span></a>
             </div>
           </nav>
     </header>
     <main>
-        <section class="welcome">
-            <h1>Welcome Shay Horovitz</h1>
+        <section class="upload">
+            <h2>Interview Page
+            </h2>
+            <form>
+                <label>Upload Interview Video</label>
+                <input type="file" id="file-upload" name="file-upload" class="file-input"><br>
+                <button id="upload-button" type="button" style="display: none;">Upload</button>
+                <label for="camera">Open Camera</label>
+                <button id="camera" type="button">Open Camera</button>
+                <button id="close-camera" type="button" style="display: none;">Close Camera</button>
+            </form>            
+            <div class="image-container">
+                <video id="video-stream" width="400" height="300"></video>
+            </div>
         </section>
-  
     </main>
-  </body>
+    <script src="script.js"></script>
+</body>
 </html>
-
-
