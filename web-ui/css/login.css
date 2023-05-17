@@ -1,14 +1,17 @@
 body {
-  background: gray;
+  /* background: gray; */
   font-family:MV Boli;
   /* 'Roboto', sans-serif; */
+  background: #8e9eab;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .login-box {
   margin-top: 75px;
   height: auto;
   background: #1A2226;
-  box-shadow: 0 3px 20px rgba(253, 253, 253, 0.993), 0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 3px 20px #1CD8D2, 0 3px 6px rgba(0, 0, 0, 0.23);
   text-align: center;
   border-radius: 20px;
   /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); */
@@ -19,7 +22,7 @@ body {
   font-size: 80px;
   line-height: 100px;
   background: -webkit-linear-gradient(#27EF9F, #0DB8DE);
-  -webkit-background-clip: text;
+  /* -webkit-background-clip: text; */
   -webkit-text-fill-color: transparent;
 }
 
@@ -41,7 +44,7 @@ body {
 input[type=text] {
   background-color: #1A2226;
   border: none;
-  border-bottom: 2px solid #0DB8DE;
+  border-bottom: 2px solid #1CD8D2;
   border-top: 0px;
   border-radius: 0px;
   font-weight: bold;
@@ -54,7 +57,7 @@ input[type=text] {
 input[type=number] {
   background-color: #1A2226;
   border: none;
-  border-bottom: 2px solid #0DB8DE;
+  border-bottom: 2px solid #1CD8D2;
   border-top: 0px;
   border-radius: 0px;
   font-weight: bold;
@@ -67,7 +70,7 @@ input[type=number] {
 input[type=email] {
   background-color: #1A2226;
   border: none;
-  border-bottom: 2px solid #0DB8DE;
+  border-bottom: 2px solid #1CD8D2;
   border-top: 0px;
   border-radius: 0px;
   font-weight: bold;
@@ -80,7 +83,7 @@ input[type=email] {
 input[type=password] {
   background-color: #1A2226;
   border: none;
-  border-bottom: 2px solid #0DB8DE;
+  border-bottom: 2px solid #1CD8D2;
   border-top: 0px;
   border-radius: 0px;
   font-weight: bold;
@@ -93,7 +96,7 @@ input[type=password] {
 select {
   background-color: #1A2226 !important;
   border: none !important;
-  border-bottom: 2px solid #0DB8DE !important;
+  border-bottom: 2px solid #1CD8D2 !important;
   border-top: 0px !important;
   border-radius: 0px !important;
   font-weight: bold !important;
@@ -112,7 +115,7 @@ select {
   border-color: inherit;
   -webkit-box-shadow: none;
   box-shadow: none;
-  border-bottom: 2px solid #0DB8DE;
+  border-bottom: 2px solid #1CD8D2;
   outline: 0;
   background-color: #1A2226;
   color: #ECF0F5;
@@ -135,8 +138,8 @@ label {
 }
 
 .btn-outline-primary {
-  border-color: #0DB8DE;
-  color: #0DB8DE;
+  border-color:#1CD8D2;
+  color: #1CD8D2;
   border-radius: 0px;
   font-weight: bold;
   letter-spacing: 1px;
@@ -144,7 +147,7 @@ label {
 }
 
 .btn-outline-primary:hover {
-  background-color: #0DB8DE;
+  background-color: #1CD8D2;
   right: 0px;
 }
 

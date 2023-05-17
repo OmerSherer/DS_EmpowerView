@@ -3,8 +3,15 @@ const closeCameraButton = document.getElementById('close-camera');
 const videoStream = document.getElementById('video-stream');
 const fileInput = document.getElementById('file-upload');
 const uploadButton = document.getElementById('upload-button');
+const imageUpload = document.getElementById('imageUpload');
 
-cameraButton.onclick = async () => {
+window.addEventListener("load",()=>{
+    if(fileInput.value == "") {
+        fileInput.innerHTML = "Choose file"
+    }
+})
+
+async function openCamera(){
     const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: false});
     videoStream.srcObject = stream;
     videoStream.play();
@@ -12,6 +19,10 @@ cameraButton.onclick = async () => {
     closeCameraButton.style.display = 'block';
     uploadButton.style.display = 'none';
 }
+
+cameraButton.addEventListener("click" , openCamera)
+
+imageTakeVideo.addEventListener("click" , openCamera)
 
 closeCameraButton.onclick = () => {
     videoStream.srcObject.getTracks()[0].stop();
@@ -24,11 +35,13 @@ closeCameraButton.onclick = () => {
 }
 
 fileInput.onchange = () => {
-    if (fileInput.value) {
+    if(fileInput.value.includes(".mp4")){
         uploadButton.style.display = 'block';
     } else {
+        alert("You need to insert mp4 file")
         uploadButton.style.display = 'none';
     }
+   
 }
 
 uploadButton.onclick = () => {
@@ -36,3 +49,5 @@ uploadButton.onclick = () => {
     fileInput.value = '';
     uploadButton.style.display = 'none';
 }
+
+// imageUpload.addEventListener("click" , onclick)

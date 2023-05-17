@@ -27,7 +27,7 @@
             <div class="nav left">
               <span class="gradient skew">
                 <h1 class="logo un-skew"><a href="index.html">
-                  <img src="images/logo3.png" alt="Logo" class="logo">
+                  <img src="images/logoupdate.png" alt="Logo" class="logo">
                   </a></h1>
               </span>
               <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
@@ -37,25 +37,36 @@
               <a href="login.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Login</span></span></a>
               <a href="signup.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Sign-up</span></span></a>
               <a href="interview.html" class="nav-link active"><span class="nav-link-span"><span class="u-nav">Interview</span></span></a>
-              <a href="welcome.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">welcome</span></span></a>
             </div>
           </nav>
     </header>
     <main>
         <section class="upload">
-            <h2>Interview Page
-            </h2>
-            <form>
-                <label>Upload Interview Video</label>
-                <input type="file" id="file-upload" name="file-upload" class="file-input"><br>
-                <button id="upload-button" type="button" style="display: none;">Upload</button>
-                <label for="camera">Open Camera</label>
-                <button id="camera" type="button">Open Camera</button>
-                <button id="close-camera" type="button" style="display: none;">Close Camera</button>
-            </form>            
-            <div class="image-container">
-                <video id="video-stream" width="400" height="300"></video>
+          <h2>welcome x
+          </h2>
+          <div id="imagesDiv">
+            <div class="openCameraDiv">
+              <label>Upload Interview Video</label>
+              <button id="upload" class="button" type="button">
+                <input type="file" id="file-upload" name="file-upload" class="file-input">
+                </button>
+              <!-- <input type="file" id="file-upload" name="file-upload" class="file-input"><br> -->
+              <button id="upload-button" type="button" style="display: none;">Upload</button>
+              <img src="./images/upload-file.png" id="imageUpload">
             </div>
+            <div class="openCameraDiv">
+              <label for="camera">Open Camera</label>
+              <button id="camera" class="button" type="button">Open Camera</button>
+              <button id="close-camera" type="button" style="display: none;">Close Camera</button>
+
+              <img src="./images/take_video.png" id="imageTakeVideo">
+            </div>
+          </div>
+          <form>
+          </form>            
+          <div class="image-container">
+              <video id="video-stream" width="400" height="300"></video>
+          </div>
         </section>
     </main>
     <script src="script.js"></script>
