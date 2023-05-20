@@ -1,3 +1,6 @@
 # holistic_folder/output_csv_directory/*
 holistic_folder/__pycache__
 .DS_STORE
+
+express-app/node_modules
+express-app/package-lock.json
