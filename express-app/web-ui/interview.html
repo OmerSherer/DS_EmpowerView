@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Job Interview Page</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+      integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+      integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" /> 
+  
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/interview.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+
+</head>
+<body>
+    <header>
+        <nav id="nav">
+            <div class="nav left">
+              <span class="gradient skew">
+                <h1 class="logo un-skew"><a href="index.html">
+                  <img src="images/logoupdate.png" alt="Logo" class="logo">
+                  </a></h1>
+              </span>
+              <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
+            </div>
+            <div class="nav right">
+              <a href="index.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
+              <a href="login.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Login</span></span></a>
+              <a href="signup.html" class="nav-link"><span class="nav-link-span"><span class="u-nav">Sign-up</span></span></a>
+              <a href="interview.html" class="nav-link active"><span class="nav-link-span"><span class="u-nav">Interview</span></span></a>
+            </div>
+          </nav>
+    </header>
+    <main>
+        <section class="upload">
+          <h2>welcome x
+          </h2>
+          <div id="imagesDiv">
+            <div class="openCameraDiv">
+              <label>Upload Interview Video</label>
+              <button id="upload" class="button" type="button">
+                <input type="file" id="file-upload" name="file-upload" class="file-input">
+                </button>
+              <!-- <input type="file" id="file-upload" name="file-upload" class="file-input"><br> -->
+              <button id="upload-button" type="button" style="display: none;">Upload</button>
+              <img src="./images/upload-file.png" id="imageUpload">
+            </div>
+            <div class="openCameraDiv">
+              <label for="camera">Open Camera</label>
+              <button id="camera" class="button" type="button">Open Camera</button>
+              <button id="close-camera" type="button" style="display: none;">Close Camera</button>
+
+              <img src="./images/take_video.png" id="imageTakeVideo">
+            </div>
+          </div>
+          <form>
+          </form>            
+          <div class="image-container">
+              <video id="video-stream" width="400" height="300"></video>
+          </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
