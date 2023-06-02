@@ -299,7 +299,7 @@ def analyzeVideo(csvPath):
     )
 
 
-def writeOnFrameAnomalies(
+def writeAnomaliesOnFrame(
     cap,
     frame,
     index: int,
