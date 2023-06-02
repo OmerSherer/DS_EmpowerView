@@ -280,7 +280,6 @@ def analyzeVideo(csvPath):
 
     y_predictions = outliers < 0
 
-    # TODO: change to actual outputs
     y = outliers * -1
     y = y - y.min()
     y = y / y.max()
