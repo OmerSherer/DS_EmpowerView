@@ -5,6 +5,7 @@ import sqlite3
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
 
+
 def create_table():
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
@@ -55,6 +56,19 @@ def interview():
         return redirect(url_for('login'))
 
     return render_template('interview.html', fullname=user[1])
+
+@app.route('/interview/upload' , methods=['POST'])
+def upload():
+    video = request.files['file-upload']
+    video.save ('file.mp4')
+    return 'Video uploaded and saved successfully!'
+
+# @app.route('/interview', methods=['POST'])
+# def interview():
+#     video = request.files['file-upload']
+#     video.save('/home/cs206/Downloads/video.mp4')
+#     return 'Video uploaded and saved successfully!'
+
 @app.route('/report')
 def report():
     if 'user_id' not in session:

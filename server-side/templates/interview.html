@@ -51,12 +51,22 @@
           <div id="imagesDiv">
             <div class="openCameraDiv">
               <label>Upload Interview Video</label>
-              <button id="upload" class="button" type="button">
+              <form method="POST" action="/interview/upload" enctype="multipart/form-data" >
                 <input type="file" id="file-upload" name="file-upload" class="file-input">
-                </button>
+                <input type="submit" value="upload"/>
+              <!-- <button id="upload" class="button" type="button">
+                send
+                </button> -->
+              </form>
               <!-- <input type="file" id="file-upload" name="file-upload" class="file-input"><br> -->
               <button id="upload-button" type="button" style="display: none;">Upload</button>
               <img src="{{ url_for('static', filename='images/upload-file.png') }}" id="imageUpload">
+
+              <!-- <form method="POST" action="/upload" enctype="multipart/form-data">
+                <input type="file" name="video">
+                <input type="submit" value="Upload">
+              </form> -->
+
             </div>
             <div class="openCameraDiv">
               <label for="camera">Open Camera</label>
