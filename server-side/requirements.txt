@@ -1,3 +1,13 @@
 Flask==2.3.2
-Werkzeug==2.3.4
-gunicorn==20.1.0
+matplotlib==3.6.3
+mediapipe==0.9.1.0
+numpy==1.23.4
+opencv_contrib_python==4.7.0.72
+opencv_python==4.7.0.68
+pandas==1.5.2
+scikit_learn==1.2.0
+scipy==1.10.1
+tensorflow==2.11.1
+tensorflow_intel==2.11.1
+torch==1.13.1
+Werkzeug==2.3.3
