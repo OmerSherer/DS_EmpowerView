@@ -7,9 +7,9 @@ __pycache__
 express-app/node_modules
 express-app/package-lock.json
 
-# server-side/temp_files/videos/*
-# server-side/temp_files/interview_outputs/*
-# server-side/temp_files/report_outputs/*
+server-side/temp_files/videos/*
+server-side/temp_files/interview_outputs/*
+server-side/temp_files/report_outputs/*
 
 attempts/*
-# server-side/models/*
+server-side/models/*
