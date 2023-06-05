@@ -20,7 +20,7 @@ def get_gesture_name(prediction):
 
 def create_csv_file_coords(file):
     if not os.path.isfile(file):
-        header = ['time', 'label']
+        header = ['timestamp', 'label']
         for i in range(1, 544):
             header += [f'x{i}', f'y{i}', f'z{i}', f'v{i}']
         with open(file, 'w', newline='') as f:
@@ -30,7 +30,7 @@ def create_csv_file_coords(file):
 
 def create_csv_file_confidence(file):
     if not os.path.isfile(file):
-        header = ['time', 'label']
+        header = ['timestamp', 'label']
         header += gesture_names
         with open(file, 'w', newline='') as f:
             writer = csv.writer(f)
@@ -44,13 +44,15 @@ def extract_landmarks(landmarks):
         return [0] * 84
 
 
-def process_interview(input_file, model_path, output_file_coords, output_file_confidence, show_cam = True):
+def process_video_to_csv(input_file, model_path, output_file_coords, output_file_confidence, show_cam = True):
 
     create_csv_file_coords(output_file_coords)
     create_csv_file_confidence(output_file_confidence)
 
     mp_holistic, mp_drawing = mp.solutions.holistic, mp.solutions.drawing_utils
     model = keras.models.load_model(model_path)
+
+    fps = 0
 
     with mp_holistic.Holistic(static_image_mode=False, min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
         cap = cv2.VideoCapture(input_file)
@@ -113,3 +115,5 @@ def process_interview(input_file, model_path, output_file_coords, output_file_co
         df.to_csv(output_file_coords, mode='a', index=False, header=False)
         df = pd.DataFrame(confidence_list)
         df.to_csv(output_file_confidence, mode='a', index=False, header=False)
+
+        return fps

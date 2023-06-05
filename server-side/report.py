@@ -69,8 +69,8 @@ def make_report(confidence_csv):
     heights = np.ones(len(replaced_strings))
 
     # Plot the replaced strings
-    fig, ax = plt.subplots(figsize=(len(data['time']) * 0.1, 3))
-    bars = ax.bar(data['time'], heights, color=[
+    fig, ax = plt.subplots(figsize=(len(data['timestamp']) * 0.1, 3))
+    bars = ax.bar(data['timestamp'], heights, color=[
         label_colors[unique_labels.index(label)] for label in replaced_strings])
 
     # Remove y-axis and tick labels
