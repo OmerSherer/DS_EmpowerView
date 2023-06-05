@@ -72,7 +72,7 @@ def _movingaverage(interval, window_size):
     return np.convolve(interval, window, "same")
 
 
-def analyzeVideo(csvPath):
+def analyzeVideo(csvPath, framesPerSecond):
     """
     Analyze anomlies in certain video given its csv embeddings.
 
@@ -93,13 +93,22 @@ def analyzeVideo(csvPath):
     (Last three for `writeOnFrameAnomalies` function).
     """
 
-    framesPerSecond = 30
     df = read_csv(csvPath)
 
+    df_noTimestamp = df
+
     try:
-        df_noTimestamp = df.drop(["timestamp"], axis=1)
+        df_noTimestamp = df_noTimestamp.drop(["timestamp"], axis=1)
     except KeyError:
-        df_noTimestamp = df
+        pass
+    try:
+        df_noTimestamp = df_noTimestamp.drop(["time"], axis=1)
+    except KeyError:
+        pass
+    try:
+        df_noTimestamp = df_noTimestamp.drop(["label"], axis=1)
+    except KeyError:
+        pass
 
     df_noZero = df_noTimestamp[df_noTimestamp.columns[~(df_noTimestamp.sum() == 0)]]
 

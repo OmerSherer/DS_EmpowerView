@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
-import threading
 
-from classify import process_interview  # gesture classifyer
-from report import make_report # report maker
+from process_interview import process_interview
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
@@ -73,18 +71,7 @@ def upload():
     video.save(file_path)
 
     # processing video in the background
-    def process_interview_thread():
-        process_interview(input_file=file_path,
-                          model_path='models/my_model6.h5',
-                          output_file_coords='temp_files/interview_outputs/coords.csv',
-                          output_file_confidence='temp_files/interview_outputs/confidence.csv',
-                          show_cam=False)
-        
-        make_report('temp_files/interview_outputs/confidence.csv')
-
-    interview_thread = threading.Thread(target=process_interview_thread)
-    interview_thread.start()
-    ####################################
+    process_interview(file_path)
 
     return 'Video uploaded and saved successfully!'
 
@@ -150,6 +137,11 @@ def welcome():
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
+
+#example
+from process_interview import func
+func(app)
+########
 
 if __name__ == "__main__":
     app.run(debug=True)
