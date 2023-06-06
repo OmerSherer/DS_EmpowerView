@@ -13,3 +13,4 @@ server-side/temp_files/report_outputs/*.png
 
 attempts/*
 server-side/models/*.h5
+database.db

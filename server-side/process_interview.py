@@ -1,26 +1,74 @@
+import sqlite3
 import threading
 
 from classify import process_video_to_csv  # gesture classifyer
 from report import make_report  # report maker
-from anomalyDetection import analyzeVideo # annomaly detection
+from anomalyDetection import analyzeVideo  # annomaly detection
+
 
 def func(app):
-    @app.route('/hello')
+    @app.route("/hello")
     def hello():
-        return 'hello'
-    
+        return "hello"
 
-def process_interview(file_path):
-    def process_interview_thread(file_path):
-        fps = process_video_to_csv(input_file=file_path,
-                                   model_path='models/my_model6.h5',
-                                   output_file_coords='temp_files/interview_outputs/coords.csv',
-                                   output_file_confidence='temp_files/interview_outputs/confidence.csv',
-                                   show_cam=False)
-        
-        make_report('temp_files/interview_outputs/confidence.csv')
 
-        print(analyzeVideo('temp_files/interview_outputs/coords.csv', fps))
+def process_interview(file_path, interviewId):
+    def process_interview_thread(file_path, interviewId):
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        # TODO: add actual userId
+        c.execute(
+            "INSERT INTO Reports (id, userid, isfinished) VALUES (?, ?, ?)",
+            (interviewId, None, False),
+        )
+        conn.commit()
+        conn.close()
 
-    interview_thread = threading.Thread(target=process_interview_thread, args=(file_path,))
+        fps = process_video_to_csv(
+            input_file=file_path,
+            model_path="models/my_model6.h5",
+            output_file_coords=f"temp_files/interview_outputs/{interviewId}-coords.csv",
+            output_file_confidence=f"temp_files/interview_outputs/{interviewId}-confidence.csv",
+            show_cam=False,
+        )
+
+        make_report(f"temp_files/interview_outputs/{interviewId}-confidence.csv")
+
+        (
+            numOfAnomlies,
+            _,
+            xAnomlies,
+            yAnomlies,
+            y_predictions,
+            expectedPoints,
+            actualPoints,
+        ) = analyzeVideo(f"temp_files/interview_outputs/{interviewId}-coords.csv", fps)
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        c.execute(
+            """
+            UPDATE Reports
+            SET isfinished = ?,
+                anomaliesNum = ?
+            WHERE
+                id = ?
+            """,
+            (True, int(numOfAnomlies), interviewId),
+        )
+        c.execute(
+            f"""CREATE TABLE IF NOT EXISTS AnomliesByTime_{interviewId}
+                 (time REAL, chance REAL)"""
+        )
+        for time, chance in zip(xAnomlies, yAnomlies):
+            c.execute(
+                f"""INSERT INTO anomliesByTime_{interviewId} (time, chance)
+                VALUES (?, ?)""",
+                (float(time), float(chance)),
+            )
+        conn.commit()
+        conn.close()
+
+    interview_thread = threading.Thread(
+        target=process_interview_thread, args=(file_path, interviewId)
+    )
     interview_thread.start()
