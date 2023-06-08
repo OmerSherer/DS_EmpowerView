@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import uuid
 
 from process_interview import process_interview
+from numpy import array as np_array
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret-key"
@@ -106,7 +107,7 @@ def upload():
     video.save(file_path)
 
     # processing video in the background
-    process_interview(file_path, interviewId)
+    process_interview(file_path, interviewId, session["user_id"])
 
     return "Video uploaded and saved successfully!"
 
@@ -116,23 +117,6 @@ def upload():
 #     video = request.files['file-upload']
 #     video.save('/home/cs206/Downloads/video.mp4')
 #     return 'Video uploaded and saved successfully!'
-
-
-@app.route("/report")
-def report():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-
-    conn = sqlite3.connect("database.db")
-    c = conn.cursor()
-    c.execute("SELECT * FROM User WHERE id = ?", (session["user_id"],))
-    user = c.fetchone()
-    conn.close()
-
-    if user is None:
-        return redirect(url_for("report"))
-
-    return render_template("report.html", fullname=user[1])
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -186,6 +170,96 @@ from process_interview import func
 
 func(app)
 ########
+
+
+def is_authenticated():
+    if "user_id" not in session:
+        return False
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute("SELECT * FROM User WHERE id = ?", (session["user_id"],))
+    user = c.fetchone()
+    conn.close()
+
+    if user is None:
+        return False
+    return user
+
+
+@app.route("/api/reports")
+def apiReports():
+    if not is_authenticated():
+        return "", 403
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute("SELECT * FROM Reports WHERE userid = ?", (session["user_id"],))
+    reports = c.fetchall()
+    conn.close()
+    keyedReports = []
+    for report in reports:
+        keyedReports.append({})
+        for key, value in zip(
+            [
+                "id",
+                "userid",
+                "isfinished",
+                "anomaliesNum",
+                "angryprecent",
+                "boredprecent",
+                "disgustprecent",
+                "happyprecent",
+                "sadprecent",
+                "shyprecent",
+                "stressedprecent",
+                "surprisedprecent",
+            ],
+            report,
+        ):
+            if "isfinished" == key:
+                keyedReports[-1][key] = bool(value)
+            else:
+                keyedReports[-1][key] = value
+    return jsonify(keyedReports)
+
+
+@app.route("/api/reports/anomalyprecent/<id>")
+def apiAnomalyPrecent(id):
+    if not is_authenticated():
+        return "", 403
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute(f"SELECT * FROM AnomliesByTime_{id}")
+    anomalyPrecentges = c.fetchall()
+    conn.close()
+    anomalyPrecentgesT = np_array(anomalyPrecentges).T
+    return jsonify(
+        {
+            "labels": list(anomalyPrecentgesT[0].round(decimals=2)),
+            "values": list(anomalyPrecentgesT[1].round(decimals=2)),
+        }
+    )
+
+
+@app.route("/reports")
+def report():
+    user = is_authenticated()
+    if not user:
+        return redirect(url_for("login"))
+
+    return render_template("report.html", fullname=user[1])
+
+
+@app.route("/reports/<reportid>")
+def detailedReport(reportid):
+    user = is_authenticated()
+    if not user:
+        return redirect(url_for("login"))
+
+    return render_template("detailedReport.html", fullname=user[1], reportid=reportid)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
