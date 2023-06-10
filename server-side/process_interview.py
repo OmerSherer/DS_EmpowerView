@@ -24,6 +24,7 @@ def process_interview(file_path, interviewId):
         conn.commit()
         conn.close()
 
+        # processing the input video into a co-ordinates csv file and a confidence csv file (classifier output)
         fps = process_video_to_csv(
             input_file=file_path,
             model_path="models/my_model6.h5",
@@ -32,8 +33,10 @@ def process_interview(file_path, interviewId):
             show_cam=False,
         )
 
+        # given the confidence csv file, creating 3 graphs in images for the report
         make_report(f"temp_files/interview_outputs/{interviewId}-confidence.csv")
 
+        # annomaly detection
         (
             numOfAnomlies,
             _,
