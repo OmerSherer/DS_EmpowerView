@@ -12,14 +12,14 @@ def func(app):
         return "hello"
 
 
-def process_interview(file_path, interviewId):
-    def process_interview_thread(file_path, interviewId):
+def process_interview(file_path, interviewId, uploaderId):
+    def process_interview_thread(file_path, interviewId, uploaderId):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         # TODO: add actual userId
         c.execute(
             "INSERT INTO Reports (id, userid, isfinished) VALUES (?, ?, ?)",
-            (interviewId, None, False),
+            (interviewId, uploaderId, False),
         )
         conn.commit()
         conn.close()
@@ -33,8 +33,8 @@ def process_interview(file_path, interviewId):
             show_cam=False,
         )
 
-        # given the confidence csv file, creating 3 graphs in images for the report
-        make_report(f"temp_files/interview_outputs/{interviewId}-confidence.csv")
+        # make_report(
+        #     f"temp_files/interview_outputs/{interviewId}-confidence.csv")
 
         # annomaly detection
         (
@@ -72,6 +72,7 @@ def process_interview(file_path, interviewId):
         conn.close()
 
     interview_thread = threading.Thread(
-        target=process_interview_thread, args=(file_path, interviewId)
+        target=process_interview_thread, args=(
+            file_path, interviewId, uploaderId)
     )
     interview_thread.start()

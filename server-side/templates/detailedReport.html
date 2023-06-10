@@ -30,6 +30,7 @@
       integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Font Awesome -->
     <link
@@ -120,31 +121,50 @@
     </header>
     <main>
       <section class="upload">
-        <h2>Data report</h2>
-        <div id="reports"></div>
+        <h2>Anomalies over time</h2>
+        <canvas id="anomaliesChart"></canvas>
       </section>
     </main>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
       $(function () {
-        $.getJSON("{{ url_for('apiReports') }}", (reports) => {
-          let reportsHtml = "<table>";
-          reportsHtml += "<tr>";
-          reportsHtml += "<th>id</th>";
-          reportsHtml += "<th>isfinished</th>";
-          reportsHtml += "<th>anomaliesNum</th>";
-          reportsHtml += "</tr>";
-          reports.forEach((report) => {
-            reportsHtml += "<tr>";
-            var reportid = report.id;
-            reportsHtml += `<td><a href="{{ url_for('detailedReport', reportid="") }}${report.id}">${report.id}</a></td>`;
-            reportsHtml += `<td>${report.isfinished}</td>`;
-            reportsHtml += `<td>${report.anomaliesNum}</td>`;
-            reportsHtml += "</tr>";
-          });
-          reportsHtml += "</table>";
-          $("#reports").html(reportsHtml);
-        });
+        $.getJSON(
+          "{{ url_for('apiAnomalyPrecent', id=reportid) }}",
+          (anomalyPrecenteges) => {
+            const ctx = document.getElementById("anomaliesChart");
+
+            const data = {
+              labels: anomalyPrecenteges.labels,
+              datasets: [
+                {
+                  label: "Chance of anomaly (%)",
+                  data: anomalyPrecenteges.values,
+                  fill: false,
+                  borderColor: "rgb(255, 0, 0)",
+                  tension: 0.1,
+                },
+              ],
+            };
+
+            new Chart(ctx, {
+              type: "line",
+              data: data,
+              options: {
+                elements: {
+                  point: {
+                    radius: 0,
+                  },
+                },
+                interaction: {
+                  intersect: false,
+                  mode: "index",
+                  axis: "x",
+                  mode: "nearest",
+                },
+              },
+            });
+          }
+        );
       });
     </script>
   </body>

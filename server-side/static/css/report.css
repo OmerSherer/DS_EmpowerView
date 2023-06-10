@@ -1,0 +1,15 @@
+#reports table {
+  border: 2px solid white;
+  width: 100%;
+}
+
+#reports table th {
+  text-align: left;
+  padding: 5px 3px;
+}
+
+#reports table td {
+  border: 2px solid white;
+  text-align: left;
+  padding: 3px;
+}
