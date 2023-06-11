@@ -22,10 +22,11 @@ def insert_confidences_to_tables(df_confidence, interviewId):
     c = conn.cursor()
     c.execute(
         f"""CREATE TABLE IF NOT EXISTS ConfidencesByTime_{interviewId}
-                (timestamp, label, angry, bored, disgust, happy, sad, shy, stressed, surprised)"""
-        )
-    for index, row in df_confidence.iterrows():
-        timestamp = row['timestamp']
+                (timestamp REAL, label TEXT, angry REAL, bored REAL, disgust REAL, happy REAL, sad REAL, shy REAL, stressed REAL, surprised REAL)"""
+    )
+
+    for _, row in df_confidence.iterrows():
+        timestamp = row['timestamp']/1000
         label = row['label']
         angry_confidence = row['angry']
         bored_confidence = row['bored']
@@ -40,7 +41,7 @@ def insert_confidences_to_tables(df_confidence, interviewId):
             f"""INSERT INTO ConfidencesByTime_{interviewId} (timestamp, label, angry, bored, disgust, happy, sad, shy, stressed, surprised)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (timestamp, label, angry_confidence, bored_confidence, disgust_confidence, happy_confidence,
-            sad_confidence, shy_confidence, stressed_confidence, surprised_confidence)
+             sad_confidence, shy_confidence, stressed_confidence, surprised_confidence)
         )
 
     query = """UPDATE Reports 
@@ -65,7 +66,8 @@ def make_report(confidence_csv):
     df_length = len(df_confidence)
 
     # Select columns for analysis
-    selected_columns = ['happy', 'sad', 'shy', 'stressed', 'angry', 'surprised', 'bored', 'disgust']
+    selected_columns = ['happy', 'sad', 'shy', 'stressed',
+                        'angry', 'surprised', 'bored', 'disgust']
 
     data = pd.read_csv(confidence_csv)
     selected_data = data[selected_columns]

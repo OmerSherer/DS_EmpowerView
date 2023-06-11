@@ -1,3 +1,7 @@
+#reports {
+  overflow-x: auto;
+}
+
 #reports table {
   border: 2px solid white;
   width: 100%;

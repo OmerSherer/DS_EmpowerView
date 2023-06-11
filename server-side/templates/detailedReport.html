@@ -123,27 +123,71 @@
       <section class="upload">
         <h2>Anomalies over time</h2>
         <canvas id="anomaliesChart"></canvas>
+        <h2>Confidence</h2>
+        <canvas id="confidenceChart"></canvas>
       </section>
     </main>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
       $(function () {
         $.getJSON(
-          "{{ url_for('apiAnomalyPrecent', id=reportid) }}",
-          (anomalyPrecenteges) => {
+          "{{ url_for('apiAnomalyPercent', id=reportid) }}",
+          (anomalyPercenteges) => {
             const ctx = document.getElementById("anomaliesChart");
 
             const data = {
-              labels: anomalyPrecenteges.labels,
+              labels: anomalyPercenteges.labels,
               datasets: [
                 {
                   label: "Chance of anomaly (%)",
-                  data: anomalyPrecenteges.values,
+                  data: anomalyPercenteges.values,
                   fill: false,
                   borderColor: "rgb(255, 0, 0)",
-                  tension: 0.1,
+                  // tension: 0.1,
                 },
               ],
+            };
+
+            new Chart(ctx, {
+              type: "line",
+              data: data,
+              options: {
+                elements: {
+                  point: {
+                    radius: 0,
+                  },
+                },
+                interaction: {
+                  intersect: false,
+                  mode: "index",
+                  axis: "x",
+                  mode: "nearest",
+                },
+              },
+            });
+          }
+        );
+
+        $.getJSON(
+          "{{ url_for('apiConfidence', id=reportid) }}",
+          (confidence) => {
+            const ctx = document.getElementById("confidenceChart");
+
+            const datasets = [];
+
+            Object.keys(confidence).forEach((label) => {
+              if (label !== "timestamp") {
+                datasets.push({
+                  label: label,
+                  data: confidence[label],
+                  fill: true,
+                });
+              }
+            });
+
+            const data = {
+              labels: confidence.timestamp,
+              datasets: datasets,
             };
 
             new Chart(ctx, {

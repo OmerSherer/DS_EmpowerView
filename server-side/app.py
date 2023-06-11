@@ -1,3 +1,4 @@
+from process_interview import func
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
@@ -5,6 +6,7 @@ import uuid
 
 from process_interview import process_interview
 from numpy import array as np_array
+from numpy import round as to_np_round_array
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret-key"
@@ -166,7 +168,6 @@ def logout():
 
 
 # example
-from process_interview import func
 
 func(app)
 ########
@@ -206,41 +207,66 @@ def apiReports():
                 "userid",
                 "isfinished",
                 "anomaliesNum",
-                "angryprecent",
-                "boredprecent",
-                "disgustprecent",
-                "happyprecent",
-                "sadprecent",
-                "shyprecent",
-                "stressedprecent",
-                "surprisedprecent",
+                "angrypercent",
+                "boredpercent",
+                "disgustpercent",
+                "happypercent",
+                "sadpercent",
+                "shypercent",
+                "stressedpercent",
+                "surprisedpercent",
             ],
             report,
         ):
+            if "userid" == key:
+                continue
             if "isfinished" == key:
                 keyedReports[-1][key] = bool(value)
+            elif key[-7:] == "percent" and value is not None:
+                keyedReports[-1][key] = round(value * 100, ndigits=1)
             else:
                 keyedReports[-1][key] = value
     return jsonify(keyedReports)
 
 
-@app.route("/api/reports/anomalyprecent/<id>")
-def apiAnomalyPrecent(id):
+@app.route("/api/reports/anomalypercent/<id>")
+def apiAnomalyPercent(id):
     if not is_authenticated():
         return "", 403
 
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     c.execute(f"SELECT * FROM AnomliesByTime_{id}")
-    anomalyPrecentges = c.fetchall()
+    anomalyPercentges = c.fetchall()
     conn.close()
-    anomalyPrecentgesT = np_array(anomalyPrecentges).T
+    anomalyPercentgesT = np_array(anomalyPercentges).T
     return jsonify(
         {
-            "labels": list(anomalyPrecentgesT[0].round(decimals=2)),
-            "values": list(anomalyPrecentgesT[1].round(decimals=2)),
+            "labels": list(anomalyPercentgesT[0].round(decimals=2)),
+            "values": list(anomalyPercentgesT[1].round(decimals=2)),
         }
     )
+
+
+@app.route("/api/reports/confidence/<id>")
+def apiConfidence(id):
+    if not is_authenticated():
+        return "", 403
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute(
+        f"SELECT timestamp, angry, bored, disgust, happy, sad, shy, stressed, surprised FROM ConfidencesByTime_{id}")
+    confidence = c.fetchall()
+    conn.close()
+    confidenceT = np_array(confidence).T
+    returnedConfidence = {}
+    for confidence, label in zip(confidenceT, ["timestamp", "angry", "bored", "disgust", "happy", "sad", "shy", "stressed", "surprised"]):
+        if label == "timestamp":
+            returnedConfidence[label] = list((confidence).round(decimals=2))
+            continue
+        returnedConfidence[label] = list((confidence * 100).round(decimals=1))
+    return jsonify(returnedConfidence)
 
 
 @app.route("/reports")
