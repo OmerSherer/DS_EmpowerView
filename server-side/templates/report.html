@@ -133,13 +133,33 @@
           reportsHtml += "<th>id</th>";
           reportsHtml += "<th>isfinished</th>";
           reportsHtml += "<th>anomaliesNum</th>";
+          reportsHtml += "<th>angry</th>";
+          reportsHtml += "<th>bored</th>";
+          reportsHtml += "<th>disgust</th>";
+          reportsHtml += "<th>happy</th>";
+          reportsHtml += "<th>sad</th>";
+          reportsHtml += "<th>shy</th>";
+          reportsHtml += "<th>stressed</th>";
+          reportsHtml += "<th>surprised</th>";
           reportsHtml += "</tr>";
           reports.forEach((report) => {
             reportsHtml += "<tr>";
             var reportid = report.id;
-            reportsHtml += `<td><a href="{{ url_for('detailedReport', reportid="") }}${report.id}">${report.id}</a></td>`;
+            reportsHtml += `<td><a tooltip="${
+              report.id
+            }" href="{{ url_for('detailedReport', reportid="") }}${
+              report.id
+            }">${report.id.substring(0, 5)}...</a></td>`;
             reportsHtml += `<td>${report.isfinished}</td>`;
             reportsHtml += `<td>${report.anomaliesNum}</td>`;
+            reportsHtml += `<td>${report.angrypercent}%</td>`;
+            reportsHtml += `<td>${report.boredpercent}%</td>`;
+            reportsHtml += `<td>${report.disgustpercent}%</td>`;
+            reportsHtml += `<td>${report.happypercent}%</td>`;
+            reportsHtml += `<td>${report.sadpercent}%</td>`;
+            reportsHtml += `<td>${report.shypercent}%</td>`;
+            reportsHtml += `<td>${report.stressedpercent}%</td>`;
+            reportsHtml += `<td>${report.surprisedpercent}%</td>`;
             reportsHtml += "</tr>";
           });
           reportsHtml += "</table>";

@@ -46,7 +46,8 @@ class _RNN(Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(_RNN, self).__init__()
         self.hidden_size = hidden_size
-        self.lstm = LSTM(input_size, hidden_size, num_layers=2, batch_first=True)
+        self.lstm = LSTM(input_size, hidden_size,
+                         num_layers=2, batch_first=True)
         self.fc = Linear(hidden_size, output_size)
 
     def forward(self, x):
@@ -110,7 +111,8 @@ def analyzeVideo(csvPath, framesPerSecond):
     except KeyError:
         pass
 
-    df_noZero = df_noTimestamp[df_noTimestamp.columns[~(df_noTimestamp.sum() == 0)]]
+    df_noZero = df_noTimestamp[df_noTimestamp.columns[~(
+        df_noTimestamp.sum() == 0)]]
 
     sc = StandardScaler()
     df_scaled = sc.fit_transform(df_noZero)
@@ -163,7 +165,8 @@ def analyzeVideo(csvPath, framesPerSecond):
         ),
         (
             "Local Outlier Factor",
-            LocalOutlierFactor(n_neighbors=35, contamination=outliers_fraction),
+            LocalOutlierFactor(
+                n_neighbors=35, contamination=outliers_fraction),
         ),
     ]
 
@@ -192,7 +195,7 @@ def analyzeVideo(csvPath, framesPerSecond):
     X = []
     Y = []
     for i in range(len(df_scaled) - sequence_length):
-        X.append(df_scaled[i : i + sequence_length])
+        X.append(df_scaled[i: i + sequence_length])
         Y.append(df_scaled[i + sequence_length])
     X = np.array(X)
     Y = np.array(Y)
@@ -227,8 +230,9 @@ def analyzeVideo(csvPath, framesPerSecond):
 
     absoluteErrors = np.abs(predictions - Y.numpy())
     meanErrors = np.mean(absoluteErrors, axis=1).argsort()
-    topOnePrecent = int((timestamps - sequence_length) * (1 - outliers_fraction))
-    rnnAnomalies = meanErrors[topOnePrecent:] + sequence_length
+    topOnePercent = int((timestamps - sequence_length)
+                        * (1 - outliers_fraction))
+    rnnAnomalies = meanErrors[topOnePercent:] + sequence_length
 
     RNNColumnAnomalies = (
         absoluteErrors >= np.quantile(absoluteErrors, 0.99, axis=1)[:, None]
@@ -236,7 +240,8 @@ def analyzeVideo(csvPath, framesPerSecond):
 
     indexesRNNColumnAnomalies = []
     for i in RNNColumnAnomalies:
-        indexesRNNColumnAnomalies.append(np.arange(RNNColumnAnomalies.shape[1])[i])
+        indexesRNNColumnAnomalies.append(
+            np.arange(RNNColumnAnomalies.shape[1])[i])
 
     XYIndexAnomalies = []
     for indexesOfAnomalies in indexesRNNColumnAnomalies:

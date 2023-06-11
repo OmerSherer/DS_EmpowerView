@@ -16,7 +16,6 @@ def process_interview(file_path, interviewId, uploaderId):
     def process_interview_thread(file_path, interviewId, uploaderId):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
-        # TODO: add actual userId
         c.execute(
             "INSERT INTO Reports (id, userid, isfinished) VALUES (?, ?, ?)",
             (interviewId, uploaderId, False),
@@ -26,10 +25,10 @@ def process_interview(file_path, interviewId, uploaderId):
 
         # processing the input video into a co-ordinates csv file and a confidence csv file (classifier output)
         (
-            fps, 
-            df_coords, 
+            fps,
+            df_coords,
             df_confidence
-         ) = process_video_to_csv(
+        ) = process_video_to_csv(
             input_file=file_path,
             model_path="models/my_model6.h5",
             output_file_coords=f"temp_files/interview_outputs/{interviewId}-coords.csv",
@@ -39,7 +38,8 @@ def process_interview(file_path, interviewId, uploaderId):
 
         # make_report(
         #     f"temp_files/interview_outputs/{interviewId}-confidence.csv")
-        insert_confidences_to_tables(df_confidence=df_confidence, interviewId=interviewId)
+        insert_confidences_to_tables(
+            df_confidence=df_confidence, interviewId=interviewId)
 
         # annomaly detection
         (
