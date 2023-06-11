@@ -1,7 +1,62 @@
+import sqlite3
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+
+
+def insert_confidences_to_tables(df_confidence, interviewId):
+
+    df_frequency = df_confidence.drop(['timestamp', 'label'], axis=1)
+    columns = df_frequency.columns
+    counts = {col: 0 for col in columns}
+    df_labels = df_confidence['label']
+    for label in df_labels.values:
+        counts[label] += 1
+    frequency = [counts[column] / df_confidence.shape[0] for column in columns]
+
+    label_counts = df_frequency.count()
+    total_count = df_frequency.values.shape[0]
+    label_percentages = (label_counts / total_count) * 100
+    label_percentages_list = label_percentages.tolist()
+
+    print(frequency)
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute(
+        f"""CREATE TABLE IF NOT EXISTS ConfidencesByTime_{interviewId}
+                (timestamp, label, angry, bored, disgust, happy, sad, shy, stressed, surprised)"""
+        )
+    for index, row in df_confidence.iterrows():
+        timestamp = row['timestamp']
+        label = row['label']
+        angry_confidence = row['angry']
+        bored_confidence = row['bored']
+        disgust_confidence = row['disgust']
+        happy_confidence = row['happy']
+        sad_confidence = row['sad']
+        shy_confidence = row['shy']
+        stressed_confidence = row['stressed']
+        surprised_confidence = row['surprised']
+
+        c.execute(
+            f"""INSERT INTO ConfidencesByTime_{interviewId} (timestamp, label, angry, bored, disgust, happy, sad, shy, stressed, surprised)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (timestamp, label, angry_confidence, bored_confidence, disgust_confidence, happy_confidence,
+            sad_confidence, shy_confidence, stressed_confidence, surprised_confidence)
+        )
+
+    query = """UPDATE Reports 
+           SET angrypercent = ?, boredpercent = ?, disgustpercent = ?, happypercent = ?, sadpercent = ?, shypercent = ?, stressedpercent = ?, surprisedpercent = ?
+           WHERE id = ?"""
+    c.execute(query, frequency + [interviewId])
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
 
 def make_report(confidence_csv):
     # Create a folder for the images if it doesn't exist
