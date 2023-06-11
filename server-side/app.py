@@ -35,7 +35,7 @@ def create_tables():
                     userid INTEGER,
                     isfinished INTEGER,
                     anomaliesNum INTEGER,
-                    {", ".join(list(map(lambda x : x + "precent REAL", gesture_names)))},
+                    {", ".join(list(map(lambda x : x + "percent REAL", gesture_names)))},
                     FOREIGN KEY(userid) REFERENCES User(id)
                     )"""
     )
