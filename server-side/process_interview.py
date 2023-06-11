@@ -2,7 +2,7 @@ import sqlite3
 import threading
 
 from classify import process_video_to_csv  # gesture classifyer
-from report import make_report  # report maker
+from report import make_report, insert_confidences_to_tables  # report maker
 from anomalyDetection import analyzeVideo  # annomaly detection
 
 
@@ -25,7 +25,11 @@ def process_interview(file_path, interviewId, uploaderId):
         conn.close()
 
         # processing the input video into a co-ordinates csv file and a confidence csv file (classifier output)
-        fps = process_video_to_csv(
+        (
+            fps, 
+            df_coords, 
+            df_confidence
+         ) = process_video_to_csv(
             input_file=file_path,
             model_path="models/my_model6.h5",
             output_file_coords=f"temp_files/interview_outputs/{interviewId}-coords.csv",
@@ -35,6 +39,7 @@ def process_interview(file_path, interviewId, uploaderId):
 
         # make_report(
         #     f"temp_files/interview_outputs/{interviewId}-confidence.csv")
+        insert_confidences_to_tables(df_confidence=df_confidence, interviewId=interviewId)
 
         # annomaly detection
         (
