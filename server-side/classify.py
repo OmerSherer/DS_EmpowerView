@@ -81,19 +81,22 @@ def process_video_to_csv(input_file, model_path, output_file_coords, output_file
             feature_vector = face_row + pose_row + left_hand_row + right_hand_row
 
             if results.face_landmarks:
-                current_time = time.time()
-                time_elapsed = current_time - start_time
+                if input_file == 0:
+                    current_time = time.time()
+                    timestamp = current_time - start_time
+                else:
+                    timestamp = cap.get(cv2.CAP_PROP_POS_MSEC)
 
                 feature_array = np.array(feature_vector).reshape((1, -1))
                 prediction = model.predict(feature_array)
                 gesture = get_gesture_name(prediction)
 
-                feature_vector = [time_elapsed, gesture] + feature_vector
+                feature_vector = [timestamp, gesture] + feature_vector
                 coords_list.append(feature_vector)
 
                 confidence = np.array(prediction).flatten()
                 confidence = [format(float(num), '.2f') for num in confidence]
-                confidence = [time_elapsed, gesture] + list(confidence)
+                confidence = [timestamp, gesture] + list(confidence)
                 confidence_list.append(confidence)
 
                 if show_cam:
@@ -111,9 +114,11 @@ def process_video_to_csv(input_file, model_path, output_file_coords, output_file
         cap.release()
         cv2.destroyAllWindows()
 
-        df = pd.DataFrame(coords_list)
-        df.to_csv(output_file_coords, mode='a', index=False, header=False)
-        df = pd.DataFrame(confidence_list)
-        df.to_csv(output_file_confidence, mode='a', index=False, header=False)
+        df_coords = pd.DataFrame(coords_list)
+        df_coords.to_csv(output_file_coords, mode='a', index=False, header=False)
+        df_coords = pd.read_csv(output_file_coords)
+        df_confidence = pd.DataFrame(confidence_list)
+        df_confidence.to_csv(output_file_confidence, mode='a', index=False, header=False)
+        df_confidence = pd.read_csv(output_file_confidence)
 
-        return fps
+        return fps, df_coords, df_confidence
