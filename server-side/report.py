@@ -16,11 +16,6 @@ def insert_confidences_to_tables(df_confidence, interviewId):
         counts[label] += 1
     frequency = [counts[column] / df_confidence.shape[0] for column in columns]
 
-    label_counts = df_frequency.count()
-    total_count = df_frequency.values.shape[0]
-    label_percentages = (label_counts / total_count) * 100
-    label_percentages_list = label_percentages.tolist()
-
     print(frequency)
 
     conn = sqlite3.connect("database.db")
