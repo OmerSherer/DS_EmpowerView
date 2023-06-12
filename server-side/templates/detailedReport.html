@@ -121,6 +121,8 @@
     </header>
     <main>
       <section class="upload">
+        <h2>General</h2>
+        <canvas id="generalChart"></canvas>
         <h2>Anomalies over time</h2>
         <canvas id="anomaliesChart"></canvas>
         <h2>Confidence</h2>
@@ -209,6 +211,25 @@
             });
           }
         );
+
+        $.getJSON("{{ url_for('apiGeneral', id=reportid) }}", (general) => {
+          const ctx = document.getElementById("generalChart");
+
+          const data = {
+            labels: general.labels,
+            datasets: [
+              {
+                label: "Interview summation",
+                data: general.data,
+              },
+            ],
+          };
+
+          new Chart(ctx, {
+            type: "doughnut",
+            data: data,
+          });
+        });
       });
     </script>
   </body>
