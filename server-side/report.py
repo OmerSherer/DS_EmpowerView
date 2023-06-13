@@ -16,8 +16,6 @@ def insert_confidences_to_tables(df_confidence, interviewId):
         counts[label] += 1
     frequency = [counts[column] / df_confidence.shape[0] for column in columns]
 
-    print(frequency)
-
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     c.execute(
