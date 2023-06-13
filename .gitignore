@@ -10,6 +10,7 @@ express-app/package-lock.json
 server-side/temp_files/videos/*.mp4
 server-side/temp_files/interview_outputs/*.csv
 server-side/temp_files/report_outputs/*.png
+server-side/videos/*.mp4
 
 attempts/*
 server-side/models/*.h5

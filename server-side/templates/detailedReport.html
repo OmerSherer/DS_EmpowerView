@@ -121,6 +121,9 @@
     </header>
     <main>
       <section class="upload">
+        <div>
+          <a href="{{ url_for('apiVideo', id=reportid) }}">Video</a>
+        </div>
         <h2>General</h2>
         <canvas id="generalChart"></canvas>
         <h2>Anomalies over time</h2>

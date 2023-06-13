@@ -1,5 +1,5 @@
 from process_interview import func
-from flask import Flask, jsonify, render_template, request, redirect, url_for, session
+from flask import Flask, jsonify, render_template, request, redirect, send_file, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import uuid
@@ -102,6 +102,7 @@ def upload():
     interviewId = uuid.uuid4().hex
 
     # saving the video
+    # TODO: remove the files on finish
     file_folder = "temp_files/videos/"
     file_name = f"{interviewId}.mp4"
     file_path = file_folder + file_name
@@ -111,7 +112,7 @@ def upload():
     # processing video in the background
     process_interview(file_path, interviewId, session["user_id"])
 
-    return "Video uploaded and saved successfully!"
+    return redirect(url_for("report"))
 
 
 # @app.route('/interview', methods=['POST'])
@@ -274,6 +275,9 @@ def apiConfidence(id):
 
 @app.route("/api/reports/general/<id>")
 def apiGeneral(id):
+    if not is_authenticated():
+        return "", 403
+
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     c.execute("SELECT angrypercent, boredpercent, disgustpercent, happypercent, sadpercent, shypercent, stressedpercent, surprisedpercent FROM Reports WHERE id = ?", (id,))
@@ -284,6 +288,15 @@ def apiGeneral(id):
     for data in general:
         generalData.append(round(data * 100, ndigits=1))
     return jsonify({"labels": ["😠angry", "🥱bored", "🤢disgust", "😀happy", "😥sad", "🥺shy", "💦stressed", "😨surprised"], "data": generalData})
+
+
+@app.route("/api/reports/video/<id>")
+def apiVideo(id):
+    if not is_authenticated():
+        return "", 403
+
+    # TODO: protect from file injection
+    return send_file(f"./videos/{id}.mp4", as_attachment=True, download_name=f"{id}.mp4")
 
 
 @app.route("/reports")

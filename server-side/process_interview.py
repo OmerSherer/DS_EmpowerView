@@ -1,9 +1,10 @@
+import cv2
 import sqlite3
 import threading
 
 from classify import process_video_to_csv  # gesture classifyer
 from report import make_report, insert_confidences_to_tables  # report maker
-from anomalyDetection import analyzeVideo  # annomaly detection
+from anomalyDetection import analyzeVideo, writeAnomaliesOnFrame  # annomaly detection
 
 
 def func(app):
@@ -13,15 +14,7 @@ def func(app):
 
 
 def process_interview(file_path, interviewId, uploaderId):
-    def process_interview_thread(file_path, interviewId, uploaderId):
-        conn = sqlite3.connect("database.db")
-        c = conn.cursor()
-        c.execute(
-            "INSERT INTO Reports (id, userid, isfinished) VALUES (?, ?, ?)",
-            (interviewId, uploaderId, False),
-        )
-        conn.commit()
-        conn.close()
+    def process_interview_thread(file_path, interviewId):
 
         # processing the input video into a co-ordinates csv file and a confidence csv file (classifier output)
         (
@@ -51,6 +44,39 @@ def process_interview(file_path, interviewId, uploaderId):
             expectedPoints,
             actualPoints,
         ) = analyzeVideo(f"temp_files/interview_outputs/{interviewId}-coords.csv", fps)
+
+        cap = cv2.VideoCapture(file_path)
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        border_size = 10
+        out = cv2.VideoWriter(f'./videos/{interviewId}.mp4', fourcc, float(fps),
+                              (int(cap.get(3))+border_size*2, int(cap.get(4))+border_size*2))
+
+        index = 0
+
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                break
+
+            current_confidence = df_confidence.iloc[index]
+
+            frame = cv2.putText(frame, current_confidence[1] + ': {:.1f}%'.format(max(current_confidence[2:])*100), (10, 50),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+            frame, isAnomaly = writeAnomaliesOnFrame(
+                cap, frame, index, border_size, y_predictions, expectedPoints, actualPoints)
+
+            if isAnomaly:
+                for _ in range(int(fps)):
+                    out.write(frame)
+            else:
+                out.write(frame)
+
+            index += 1
+
+        cap.release()
+        out.release()
+
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         c.execute(
@@ -76,8 +102,17 @@ def process_interview(file_path, interviewId, uploaderId):
         conn.commit()
         conn.close()
 
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute(
+        "INSERT INTO Reports (id, userid, isfinished) VALUES (?, ?, ?)",
+        (interviewId, uploaderId, False),
+    )
+    conn.commit()
+    conn.close()
+
     interview_thread = threading.Thread(
         target=process_interview_thread, args=(
-            file_path, interviewId, uploaderId)
+            file_path, interviewId)
     )
     interview_thread.start()
