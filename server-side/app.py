@@ -261,12 +261,29 @@ def apiConfidence(id):
     conn.close()
     confidenceT = np_array(confidence).T
     returnedConfidence = {}
+    emojis = {"angry": "😠", "bored": "🥱", "disgust": "🤢", "happy": "😀",
+              "sad": "😥", "shy": "🥺", "stressed": "💦", "surprised": "😨"}
     for confidence, label in zip(confidenceT, ["timestamp", "angry", "bored", "disgust", "happy", "sad", "shy", "stressed", "surprised"]):
         if label == "timestamp":
             returnedConfidence[label] = list((confidence).round(decimals=2))
             continue
-        returnedConfidence[label] = list((confidence * 100).round(decimals=1))
+        returnedConfidence[emojis[label] +
+                           label] = list((confidence * 100).round(decimals=1))
     return jsonify(returnedConfidence)
+
+
+@app.route("/api/reports/general/<id>")
+def apiGeneral(id):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute("SELECT angrypercent, boredpercent, disgustpercent, happypercent, sadpercent, shypercent, stressedpercent, surprisedpercent FROM Reports WHERE id = ?", (id,))
+    general = c.fetchone()
+    conn.close()
+    generalData = []
+
+    for data in general:
+        generalData.append(round(data * 100, ndigits=1))
+    return jsonify({"labels": ["😠angry", "🥱bored", "🤢disgust", "😀happy", "😥sad", "🥺shy", "💦stressed", "😨surprised"], "data": generalData})
 
 
 @app.route("/reports")
