@@ -18,4 +18,4 @@ RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 EXPOSE 80
 
 # Run app.py when the container launches
-CMD ["gunicorn", "-b", ":80", "--threads", "16", "--workers", "16", "app:app"]
+CMD ["gunicorn", "-b", ":80", "--workers", "17", "app:app"]
