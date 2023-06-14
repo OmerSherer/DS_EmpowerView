@@ -1,3 +1,4 @@
+from datetime import datetime
 import cv2
 import sqlite3
 import threading
@@ -13,7 +14,7 @@ def func(app):
         return "hello"
 
 
-def process_interview(file_path, interviewId, uploaderId):
+def process_interview(file_path, interviewId, uploaderId, name):
     def process_interview_thread(file_path, interviewId):
 
         # processing the input video into a co-ordinates csv file and a confidence csv file (classifier output)
@@ -105,8 +106,9 @@ def process_interview(file_path, interviewId, uploaderId):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     c.execute(
-        "INSERT INTO Reports (id, userid, isfinished) VALUES (?, ?, ?)",
-        (interviewId, uploaderId, False),
+        "INSERT INTO Reports (id, userid, isfinished, title, date) VALUES (?, ?, ?, ?, ?)",
+        (interviewId, uploaderId, False, name,
+         datetime.now().replace(microsecond=0).isoformat()),
     )
     conn.commit()
     conn.close()

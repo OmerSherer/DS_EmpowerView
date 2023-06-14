@@ -30,13 +30,14 @@ def create_tables():
         "stressed",
         "surprised",
     ]
-    # TODO: add column that will identify the report for the user (by name, date, etc.)
     c.execute(
         f"""CREATE TABLE IF NOT EXISTS Reports
                     (id TEXT PRIMARY KEY,
                     userid INTEGER,
                     isfinished INTEGER,
                     anomaliesNum INTEGER,
+                    title TEXT,
+                    date TEXT,
                     {", ".join(list(map(lambda x : x + "percent REAL", gesture_names)))},
                     FOREIGN KEY(userid) REFERENCES User(id)
                     )"""
@@ -110,7 +111,8 @@ def upload():
     video.save(file_path)
 
     # processing video in the background
-    process_interview(file_path, interviewId, session["user_id"])
+    process_interview(file_path, interviewId,
+                      session["user_id"], request.form['name'])
 
     return redirect(url_for("report"))
 
@@ -208,6 +210,8 @@ def apiReports():
                 "userid",
                 "isfinished",
                 "anomaliesNum",
+                "title",
+                "date",
                 "angrypercent",
                 "boredpercent",
                 "disgustpercent",
