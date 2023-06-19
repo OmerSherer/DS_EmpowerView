@@ -30,14 +30,14 @@
         <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
       </div>
       <div class="nav right">
-        <a href="{{ url_for('index') }}" class="nav-link active"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
+        <a href="{{ url_for('index') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
         {% if not session['user_id'] %}
           <a href="{{ url_for('login') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Login</span></span></a>
           <a href="{{ url_for('signup') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Sign-up</span></span></a>
         {% endif %}
         {% if session['user_id'] %}
         <a href="{{ url_for('interview') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Interview</span></span></a>
-        <a href="{{ url_for('report') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Reports</span></span></a>
+        <a href="{{ url_for('report') }}" class="nav-link active"><span class="nav-link-span"><span class="u-nav">Reports</span></span></a>
         <a href="{{ url_for('logout') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Logout</span></span></a>
       {% endif %}
       </div>

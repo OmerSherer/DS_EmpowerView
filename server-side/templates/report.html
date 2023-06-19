@@ -81,7 +81,7 @@
             <span class="fas fa-bars"></span>
           </button>
           <div class="nav right">
-            <a href="{{ url_for('index') }}" class="nav-link active"
+            <a href="{{ url_for('index') }}" class="nav-link"
               ><span class="nav-link-span"
                 ><span class="u-nav">Home</span></span
               ></a
@@ -103,7 +103,7 @@
                 ><span class="u-nav">Interview</span></span
               ></a
             >
-            <a href="{{ url_for('report') }}" class="nav-link"
+            <a href="{{ url_for('report') }}" class="nav-link active"
               ><span class="nav-link-span"
                 ><span class="u-nav">Reports</span></span
               ></a
@@ -129,12 +129,12 @@
       function loadReports() {
         $(function () {
           $.getJSON("{{ url_for('apiReports') }}", (reports) => {
-            let reportsHtml = "<table>";
+            let reportsHtml = "<table style='text-align:center;'>";
             reportsHtml += "<tr>";
-            reportsHtml += "<th>title</th>";
-            reportsHtml += "<th>date</th>";
-            reportsHtml += "<th>isfinished</th>";
-            reportsHtml += "<th>anomaliesNum</th>";
+            reportsHtml += "<th>Interview name</th>";
+            reportsHtml += "<th>Date</th>";
+            reportsHtml += "<th>Is done processing</th>";
+            reportsHtml += "<th>AnomaliesNum</th>";
             // reportsHtml += "<th>angry</th>";
             // reportsHtml += "<th>bored</th>";
             // reportsHtml += "<th>disgust</th>";

@@ -33,13 +33,13 @@
      </span>
      <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
      <div class="nav right">
-      <a href="{{ url_for('index') }}" class="nav-link active"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
+      <a href="{{ url_for('index') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
       {% if not session['user_id'] %}
         <a href="{{ url_for('login') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Login</span></span></a>
         <a href="{{ url_for('signup') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Sign-up</span></span></a>
       {% endif %}
       {% if session['user_id'] %}
-      <a href="{{ url_for('interview') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Interview</span></span></a>
+      <a href="{{ url_for('interview') }}" class="nav-link active"><span class="nav-link-span"><span class="u-nav">Interview</span></span></a>
       <a href="{{ url_for('report') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Reports</span></span></a>
       <a href="{{ url_for('logout') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Logout</span></span></a>
     {% endif %}
@@ -50,18 +50,19 @@
         <section class="upload">
           <div id="imagesDiv">
             <div class="openCameraDiv">
-              <label>Upload Interview Video</label>
-              <form method="POST" action="/interview/upload" enctype="multipart/form-data" >
-                <input type="text" placeholder="Interview name" name="name" id="name" required />
-                <input type="file" id="file-upload" name="file-upload" class="file-input" required />
-                <input type="submit" value="upload"/>
+              <label style="margin-top: 30px;">Upload Interview Video</label>
+              <form method="POST" action="/interview/upload" enctype="multipart/form-data">
+                <input type="text" style="margin-top: 30px; color: #000000;background-color: #1CD8D2" placeholder="Insert interview name" name="name" id="name" required />
+                <input type="file" id="file-upload" style="margin-top: 30px; ; margin-left: 90px;" name="file-upload"required />
+                <input id="upload-button" type="submit" style= "visibility: hidden; margin-top: 30px; color: #000000;background-color: #1CD8D2;" value="Upload"/>
               <!-- <button id="upload" class="button" type="button">
                 send
                 </button> -->
               </form>
+            
               <!-- <input type="file" id="file-upload" name="file-upload" class="file-input"><br> -->
-              <button id="upload-button" type="button" style="display: none;">Upload</button>
-              <img src="{{ url_for('static', filename='images/upload-file.png') }}" id="imageUpload">
+              <!-- <button id="upload-button" type="button" style="display: none;">Upload</button> -->
+              <img style="margin-left: 100px; margin-top: 70px;" src="{{ url_for('static', filename='images/upload-file.png') }}" id="imageUpload">
 
               <!-- <form method="POST" action="/upload" enctype="multipart/form-data">
                 <input type="file" name="video">
@@ -70,20 +71,20 @@
 
             </div>
             <div class="openCameraDiv">
-              <label for="camera">Open Camera</label>
-              <button id="camera" class="button" type="button">Open Camera</button>
-              <button id="close-camera" type="button" style="display: none;">Close Camera</button>
+              <label for="camera" style="margin-top: 30px;">Open Camera</label>
+              <button id="camera" style="margin-top: 20px;" class="button" type="button">Open Camera</button>
+              <button id="close-camera" type="button" style="display: none; margin-top: 30px;">Close Camera</button>
 
-              <img src="{{ url_for('static', filename='images/take_video.png') }}" id="imageTakeVideo">
+              <img style="margin-top: 185px;" src="{{ url_for('static', filename='images/take_video.png') }}" id="imageTakeVideo">
             </div>
           </div>
           <form>
           </form>            
           <div class="image-container">
-              <video id="video-stream" width="400" height="300"></video>
+              <video id="video-stream" style="margin-top: 30px;" width="400" height="300"></video>
           </div>
           <div>
-            <a href="{{ url_for('report') }}"><button id="camera" class="button" type="button">Move to data report</button></a>
+            <a href="{{ url_for('report') }}"><button id="camera" class="button" style="margin-top: 30px;"type="button">Move to data report</button></a>
           </div>
         </section>
     </main>

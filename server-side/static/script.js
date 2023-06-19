@@ -36,18 +36,18 @@ closeCameraButton.onclick = () => {
 
 fileInput.onchange = () => {
     if(fileInput.value.includes(".mp4")){
-        uploadButton.style.display = 'block';
+        uploadButton.style.visibility = 'visible';
     } else {
         alert("You need to insert mp4 file")
-        uploadButton.style.display = 'none';
+        uploadButton.style.visibility = 'hidden';
     }
    
 }
 
-uploadButton.onclick = () => {
-    alert('Upload video successfully');
-    fileInput.value = '';
-    uploadButton.style.display = 'none';
-}
+// uploadButton.onclick = () => {
+//     alert('Upload video successfully');
+//     fileInput.value = '';
+//     uploadButton.style.display = 'none';
+// }
 
 // imageUpload.addEventListener("click" , onclick)

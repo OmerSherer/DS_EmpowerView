@@ -94,7 +94,7 @@ body{
 
     
 .upload label[for="file-upload"]::before {
-    content: "Choose file";
+    content: "Select A File";
     display: inline-block;
     background-color: #3a99d8;
     color: #fff;
@@ -127,7 +127,7 @@ body{
 .upload button.button {
     /* background-color: #4caf50;
     margin-top: 2rem; */
-    background: #6ec671;
+    background: #1CD8D2;
     color: #ffffff !important;
     display: inline-block;
     font-size: 15px;
