@@ -341,8 +341,12 @@ def writeAnomaliesOnFrame(
     - `image`: final frame.
     - `boolean`: is the current image was an anomaly.
     """
+    try:
+        pred = y_predictions[index]
+    except IndexError:
+        return frame, False
 
-    if y_predictions[index]:
+    if pred:
         for expected, actual in zip(expectedPoints[index], actualPoints[index]):
             frame = arrowedLine(
                 frame,
