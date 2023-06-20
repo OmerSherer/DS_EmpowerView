@@ -10,10 +10,12 @@
 #reports table th {
   text-align: left;
   padding: 5px 3px;
+  text-align: center;
 }
 
 #reports table td {
   border: 2px solid white;
   text-align: left;
   padding: 3px;
+  text-align: center;
 }
