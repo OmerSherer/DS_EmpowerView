@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Job Interview Page</title>
+    <meta
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      name="viewport"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+      integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+      integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/interview.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/navbar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/report.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto"
+    />
+  </head>
+  <body>
+    <header>
+      <!-- id="nav-wrapper"> -->
+      <nav id="nav">
+        <div class="nav left">
+          <span class="gradient skew">
+            <h1 class="logo un-skew">
+              <a href="{{ url_for('index') }}">
+                <img
+                  src="{{ url_for('static', filename='images/logoupdate.png') }}"
+                  alt="Logo"
+                  class="logo"
+                />
+              </a>
+            </h1>
+          </span>
+          <button id="menu" class="btn-nav">
+            <span class="fas fa-bars"></span>
+          </button>
+          <div class="nav right">
+            <a href="{{ url_for('index') }}" class="nav-link active"
+              ><span class="nav-link-span"
+                ><span class="u-nav">Home</span></span
+              ></a
+            >
+            {% if not session['user_id'] %}
+            <a href="{{ url_for('login') }}" class="nav-link"
+              ><span class="nav-link-span"
+                ><span class="u-nav">Login</span></span
+              ></a
+            >
+            <a href="{{ url_for('signup') }}" class="nav-link"
+              ><span class="nav-link-span"
+                ><span class="u-nav">Sign-up</span></span
+              ></a
+            >
+            {% endif %} {% if session['user_id'] %}
+            <a href="{{ url_for('interview') }}" class="nav-link"
+              ><span class="nav-link-span"
+                ><span class="u-nav">Interview</span></span
+              ></a
+            >
+            <a href="{{ url_for('report') }}" class="nav-link"
+              ><span class="nav-link-span"
+                ><span class="u-nav">Reports</span></span
+              ></a
+            >
+            <a href="{{ url_for('logout') }}" class="nav-link"
+              ><span class="nav-link-span"
+                ><span class="u-nav">Logout</span></span
+              ></a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="upload">
+        <h2>Data report</h2>
+        <div id="reports"></div>
+      </section>
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+      function loadReports() {
+        $(function () {
+          $.getJSON("{{ url_for('apiReports') }}", (reports) => {
+            let reportsHtml = "<table>";
+            reportsHtml += "<tr>";
+            reportsHtml += "<th>title</th>";
+            reportsHtml += "<th>date</th>";
+            reportsHtml += "<th>isfinished</th>";
+            reportsHtml += "<th>anomaliesNum</th>";
+            // reportsHtml += "<th>angry</th>";
+            // reportsHtml += "<th>bored</th>";
+            // reportsHtml += "<th>disgust</th>";
+            // reportsHtml += "<th>happy</th>";
+            // reportsHtml += "<th>sad</th>";
+            // reportsHtml += "<th>shy</th>";
+            // reportsHtml += "<th>stressed</th>";
+            // reportsHtml += "<th>surprised</th>";
+            reportsHtml += "</tr>";
+            reports.forEach((report) => {
+              reportsHtml += "<tr>";
+              var reportid = report.id;
+              reportsHtml += `<td><a tooltip="${report.id}" href="{{ url_for('detailedReport', reportid="") }}${report.id}">${report.title}</a></td>`;
+              reportsHtml += `<td>${report.date}</td>`;
+              reportsHtml += `<td>${report.isfinished}</td>`;
+              reportsHtml += `<td>${report.anomaliesNum}</td>`;
+              // reportsHtml += `<td>${report.angrypercent}%</td>`;
+              // reportsHtml += `<td>${report.boredpercent}%</td>`;
+              // reportsHtml += `<td>${report.disgustpercent}%</td>`;
+              // reportsHtml += `<td>${report.happypercent}%</td>`;
+              // reportsHtml += `<td>${report.sadpercent}%</td>`;
+              // reportsHtml += `<td>${report.shypercent}%</td>`;
+              // reportsHtml += `<td>${report.stressedpercent}%</td>`;
+              // reportsHtml += `<td>${report.surprisedpercent}%</td>`;
+              reportsHtml += "</tr>";
+            });
+            reportsHtml += "</table>";
+            $("#reports").html(reportsHtml);
+          });
+        });
+      }
+
+      loadReports();
+      setInterval(loadReports, 10000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+version: "3.8"
+services:
+  empowerview_server:
+    build:
+      context: ./server-side
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - postgres_server
+    environment:
+      - DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres_server:5432/${POSTGRES_DB}
+      - ML_URL=http://empowerview_server_ml:3000
+    volumes:
+      - temp_files:/app/temp_files
+    networks:
+      - servernetwork
+
+  empowerview_server_ml:
+    build:
+      context: ./ml-server-side
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres_server
+    environment:
+      - DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres_server:5432/${POSTGRES_DB}
+    volumes:
+      - temp_files:/app/temp_files
+    networks:
+      - servernetwork
+
+  postgres_server:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - servernetwork
+
+volumes:
+  temp_files:
+
+networks:
+  servernetwork:

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+
+    <title>Empowerview</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+      integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+
+</head>
+<body>
+    <header >
+       <!-- id="nav-wrapper"> -->
+    <nav id="nav">
+      <div class="nav left">
+        <span class="gradient skew">
+          <h1 class="logo un-skew"><a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/logoupdate.png') }}" alt="Logo" class="logo">
+            </a></h1>
+        </span>
+        <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
+      </div>
+      <div class="nav right">
+        <a href="{{ url_for('index') }}" class="nav-link active"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
+        {% if not session['user_id'] %}
+          <a href="{{ url_for('login') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Login</span></span></a>
+          <a href="{{ url_for('signup') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Sign-up</span></span></a>
+        {% endif %}
+        {% if session['user_id'] %}
+        <a href="{{ url_for('interview') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Interview</span></span></a>
+        <a href="{{ url_for('report') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Reports</span></span></a>
+        <a href="{{ url_for('logout') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Logout</span></span></a>
+      {% endif %}
+      </div>
+    </nav>
+    </header>
+    <main>
+        <!-- <section class="description"> -->
+            <div class="video_section">
+              <video autoplay muted loop id="myVideo">
+                <source src="{{ url_for('static', filename='images/video_handshake.mp4') }}" type="video/mp4">
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
+            <!-- <div class="section" style="display: flex; align-items: center; flex-direction: column;">
+            <canvas id="mycanvas" width="370" height="50"></canvas>
+             <p class="description" style="text-align: center;">
+            Empowerview is an application for job interviews with a learning machine designed for the interviewer
+            can provide a comprehensive and efficient solution for organizations looking to optimize their hiring process and make data-driven hiring decisions. </p>
+            Join us today and discover how our Job Interview Platform can help you find the best talent for your company.
+               </p> 
+    </div> -->
+        <!-- </section> -->
+        <div class="section" >
+        <!-- style="margin-bottom: 30px;">
+          <div class="row w-100"> -->
+            <div class="col-lg-6 col-md-6 col-sm-12" id="textTry" style="display: flex; align-items: center; margin-top: 30px;">
+              <a href="interview.html" ><img src="{{ url_for('static', filename='images/tryme.png') }}" alt="Logo" class="tryme"></a>
+              <!-- <div class="d-flex flex-column" style="margin-left: 20px;">
+                <div style="margin-top: 10px; font-weight: bold; font-family: MV Boli;">
+                  Unleash the Power of AI in Interviews: 
+                    Redefining Hiring Excellence!
+                    </p> -->
+                    <div id="slogen">
+                      <img id="slogen" src="{{ url_for('static', filename='images/slogen.png') }}" alt=logo >
+                </div>
+            
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <h6>About</h6>
+            <p class="text-justify">Empowerview is a web-based,
+              fully integrated interviews with a learning machine designed for the interviewer is a powerful tool that 
+              can help streamline and optimize the hiring process.
+              With this application, interviewers can access a range of features and benefits,
+              including interview feedback and analysis, performance analytics, compliance and security features, and integration with other HR tools.
+
+            </p>
+          </div>
+  
+          <div class="col-xs-6 col-md-3">
+            <h6>Products</h6>
+            <ul class="footer-links">
+              <li><a href="#">
+                Virtual interview platform
+                </a></li>
+              <li><a href="#">
+                Interview feedback and analysis
+                </a></li>
+              <li><a href="#">
+                 History of job interview analysis
+                </a></li>
+                <li><a href="#">
+                 Interview performance analytics
+                 </a></li>
+
+            </ul>
+          </div>
+  
+          <div class="col-xs-6 col-md-3">
+            <h6>Quick Links</h6>
+            <ul class="footer-links">
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Contribute</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+        <hr> <!-- draw an horizenal line -->
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 col-sm-6 col-xs-12">
+            <p class="copyright-text">Copyright &copy; 2023 All Rights Reserved by
+              <a href="#">Empowerview</a>.
+            </p>
+          </div>
+  
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <ul class="social-icons">
+              <li><a class="facebook" href="https://www.facebook.com/"><i class="fab fa-facebook"></i></a></li>
+              <li><a class="twitter" href="https://twitter.com/"><i class="fab fa-twitter"></i></a></li>
+              <li><a class="linkedin" href="https://www.linkedin.com/"><i class="fab fa-linkedin"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  
+    <!-- call for relevant javascript files and ajax -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+  
+</body>
+</html>
