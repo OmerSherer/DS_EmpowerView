@@ -87,20 +87,22 @@ def process_interview(file_path, interviewId, executeQuery):
             ret, frame = cap.read()
             if not ret:
                 break
+            try:
+                current_confidence = df_confidence.iloc[index]
 
-            current_confidence = df_confidence.iloc[index]
-
-            frame = cv2.putText(
-                frame,
-                current_confidence[1]
-                + ": {:.1f}%".format(max(current_confidence[2:]) * 100),
-                (10, 50),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (255, 255, 255),
-                2,
-                cv2.LINE_AA,
-            )
+                frame = cv2.putText(
+                    frame,
+                    current_confidence[1]
+                    + ": {:.1f}%".format(max(current_confidence[2:]) * 100),
+                    (10, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1,
+                    (255, 255, 255),
+                    2,
+                    cv2.LINE_AA,
+                )
+            except IndexError:
+                pass
 
             frame, isAnomaly = writeAnomaliesOnFrame(
                 cap,
